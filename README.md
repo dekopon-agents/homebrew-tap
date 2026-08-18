@@ -31,13 +31,15 @@ The end-to-end walkthrough is [`examples/rubber-stamper`](https://github.com/dek
 
 ## Platforms
 
-Whichever platforms a release published. That is a property of the release, not of this tap: `Formula/dekopon.rb` is rendered from the archives a release actually attached, so adding or dropping a target changes the release and the next formula follows it.
+macOS on ARM64, and Linux on ARM64 and x86-64.
 
-`0.3.0` shipped four: macOS on arm64 and x86-64, Linux on arm64 and x86-64.
+`Formula/dekopon.rb` is rendered from the archives a release actually attached, so a new target appears here as soon as a release ships it. The platform list is not maintained by hand in two repositories.
+
+Intel Macs are the one deliberate exception. `0.3.0` did ship an `x86_64-apple-darwin` archive, but [dekopon-agents/dekopon#74](https://github.com/dekopon-agents/dekopon/pull/74) dropped that target from the release matrix, so `0.4.0` onward has none. Offering `0.3.0`'s copy would install cleanly on an Intel Mac and then dead-end, because the next `brew upgrade` would find nothing for that platform — worse than being plainly unsupported. The generator recognizes the target and skips it. Download the [v0.3.0 archive](https://github.com/dekopon-agents/dekopon/releases/tag/v0.3.0) directly or build from a checkout instead.
 
 ## How the formula is updated
 
-`Formula/dekopon.rb` is generated, not hand-written. Editing it directly is fine for an emergency, but the next release overwrites it. The generator lives in the Dekopon repository at [`.github/scripts/render-homebrew-formula.py`](https://github.com/dekopon-agents/dekopon/blob/main/.github/scripts/render-homebrew-formula.py), and [`.github/workflows/homebrew-tap.yml`](https://github.com/dekopon-agents/dekopon/blob/main/.github/workflows/homebrew-tap.yml) runs it when a release is published. It enumerates the release's assets, takes each `sha256` from the `.sha256` sidecar the release published rather than recomputing it, and pushes here only when the rendered bytes differ. Re-running a release commits nothing; re-running an *older* release is refused rather than rolling the tap backwards.
+`Formula/dekopon.rb` is generated, not hand-written. Editing it directly is fine for an emergency, but the next release overwrites it. The generator lives in the Dekopon repository at [`.github/scripts/render-homebrew-formula.py`](https://github.com/dekopon-agents/dekopon/blob/main/.github/scripts/render-homebrew-formula.py), and [`.github/workflows/homebrew-tap.yml`](https://github.com/dekopon-agents/dekopon/blob/main/.github/workflows/homebrew-tap.yml) runs it when a release is published. It enumerates the release's assets, takes each `sha256` from the `.sha256` sidecar the release published rather than recomputing it, and pushes here only when the rendered bytes differ. Re-running a release commits nothing; re-running an *older* release is refused rather than rolling the tap backwards. A target the generator does not recognize fails the job instead of vanishing from the formula; a target it has retired (see [Platforms](#platforms)) is skipped, so an immutable older release cannot reintroduce a platform the project no longer builds.
 
 ### Maintainer setup: the cross-repository credential
 

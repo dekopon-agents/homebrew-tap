@@ -18,11 +18,6 @@ class Dekopon < Formula
       url "https://github.com/dekopon-agents/dekopon/releases/download/v0.3.0/dekopon-0.3.0-aarch64-apple-darwin.tar.gz"
       sha256 "03e272c769ddcaa7bfe7431dcf3b10c7e4d8b2fd717e9bc240c7d8564b462a69"
     end
-
-    on_intel do
-      url "https://github.com/dekopon-agents/dekopon/releases/download/v0.3.0/dekopon-0.3.0-x86_64-apple-darwin.tar.gz"
-      sha256 "98f54a096f257e5533679f82682e0c8010835f5e2ffc239e11d73635e3904ada"
-    end
   end
 
   on_linux do
