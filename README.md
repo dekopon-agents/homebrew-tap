@@ -4,10 +4,13 @@
 
 ```console
 brew tap dekopon-agents/tap
+brew trust dekopon-agents/tap
 brew install dekopon
 ```
 
 `brew tap dekopon-agents/tap` is the whole name: Homebrew expands it to this repository, `dekopon-agents/homebrew-tap`.
+
+The `brew trust` line is not optional on Homebrew 6. Homebrew refuses to load a formula from any non-official tap until you trust it, and `brew install` without it fails with `Refusing to load formula dekopon-agents/tap/dekopon from untrusted tap`. Trusting records this tap in `~/.homebrew/trust.json` and nothing else; `brew untap` plus removing that entry undoes it.
 
 ## What you get
 

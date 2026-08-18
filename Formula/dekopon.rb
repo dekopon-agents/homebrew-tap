@@ -9,8 +9,9 @@
 class Dekopon < Formula
   desc "Capability-oriented control plane for self-hosted AI agents"
   homepage "https://github.com/dekopon-agents/dekopon"
-  version "0.3.0"
   license any_of: ["Apache-2.0", "MIT"]
+  # No explicit `version`: Homebrew scans 0.3.0 out of the download URL, and
+  # `brew audit --strict` rejects restating it.
 
   on_macos do
     on_arm do
