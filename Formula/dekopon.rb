@@ -16,19 +16,19 @@ class Dekopon < Formula
   on_macos do
     on_arm do
       url "https://github.com/dekopon-agents/dekopon/releases/download/v0.30.0/dekopon-0.30.0-aarch64-apple-darwin.tar.gz"
-      sha256 "1c810aa0ece71287bc56075a311be9f938052dbbea3a19b5907d4a8a7fd25dec"
+      sha256 "7ab6825365ac4cc04c2cf5db63ec6fa93c301ffabc312224da7fc67d73eef717"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/dekopon-agents/dekopon/releases/download/v0.30.0/dekopon-0.30.0-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "be49b4c047513f398269104e144d24ce2e776620d1e76963a145eb0a23142df2"
+      sha256 "34af0806acd1b43ce164216466de43c032874541ba5ed09690cac0a4ed39fae1"
     end
 
     on_intel do
       url "https://github.com/dekopon-agents/dekopon/releases/download/v0.30.0/dekopon-0.30.0-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "288fef983ad2a9bbf2fa8ea34dbe40d473d9912d3185dedc8eddb7ddaa1f1c63"
+      sha256 "99c37be87861abd954e2e43a0dc314d9a11c8872b93d729df6ff8ba3b4ab8d2c"
     end
   end
 
