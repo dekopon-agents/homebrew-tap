@@ -3,31 +3,19 @@
 [Dekopon](https://github.com/dekopon-agents/dekopon) is a capability-oriented control plane for self-hosted AI agents. This tap packages its released binaries for Homebrew on macOS and Linux.
 
 ```console
-brew tap dekopon-agents/tap
-brew trust dekopon-agents/tap
-brew install dekopon
+brew install dekopon-agents/tap/dekopon
+brew pin dekopon
 ```
 
-`brew tap dekopon-agents/tap` is the whole name: Homebrew expands it to this repository, `dekopon-agents/homebrew-tap`.
-
-The `brew trust` line is not optional on Homebrew 6. Homebrew refuses to load a formula from any non-official tap until you trust it, and `brew install` without it fails with `Refusing to load formula dekopon-agents/tap/dekopon from untrusted tap`. Trusting records this tap in `~/.homebrew/trust.json` and nothing else; `brew untap` plus removing that entry undoes it.
+`dekopon-agents/tap` is the whole tap name: Homebrew expands it to this repository, `dekopon-agents/homebrew-tap`. Since Homebrew 6.0, Homebrew loads a non-official tap's code only after trust. Installing the fully qualified name taps this repository and trusts only the `dekopon` formula, for your user (`~/.homebrew/trust.json`). `brew pin` keeps a routine `brew upgrade` from replacing the service binaries; upgrade deliberately with `brew unpin dekopon && brew upgrade dekopon && brew pin dekopon`. Undo with `brew uninstall dekopon`, `brew untap dekopon-agents/tap` and `brew untrust dekopon-agents/tap`.
 
 ## What you get
 
-One formula, four executables — because Dekopon publishes one archive per platform carrying all of them, and four formulae would each download the same tarball:
+`dekopon` installs two daemons, `dekopon-brokerd` (the authorization broker, which owns policy, provider credentials and audit) and `dekopon-gatewayd` (the unprivileged chat gateway), with their reference documents `README.md`, `BROKER.md` and `GATEWAY.md`. Both are Unix only. Installing them starts nothing, and neither runs without an owner-authored configuration file. No provider component, configuration or service is installed.
 
-| Executable | What it is |
-|---|---|
-| `dekopon` | Local agent catalog and model-account CLI. Reads the catalog and nothing else. |
-| `dekopon-run` | One-shot runner: import-free components, a sandboxed shell, a model prompt loop, and an unprivileged broker client. |
-| `dekopon-brokerd` | The authorization broker daemon. Owns policy, provider credentials, and audit. Unix only. |
-| `dekopond` | The unprivileged chat gateway daemon. Holds chat and model credentials, no broker authority. Unix only. |
+`dekopon-console`, the optional terminal console for a running broker, is a separate formula from the same release archives: `brew install dekopon-agents/tap/dekopon-console`.
 
-`dekopon` and `dekopon-run` work immediately. `dekopon-brokerd` and `dekopond` are daemons: installing them starts nothing, and neither runs without an owner-authored configuration file. `brew install` prints the paths to `BROKER.md` and `GATEWAY.md`, which are installed alongside them.
-
-The checked-in JSONPlaceholder example component is installed at `$(brew --prefix)/share/dekopon/providers/jsonplaceholder-provider.wasm`. It imports broker-owned HTTP, so it is a broker provider — name that path in `broker.yaml`. `dekopon-run inspect` is deliberately import-free and refuses to instantiate it.
-
-The end-to-end walkthrough is [`examples/rubber-stamper`](https://github.com/dekopon-agents/dekopon/tree/main/examples/rubber-stamper).
+Start from the [Dekopon install section](https://github.com/dekopon-agents/dekopon#install); on a Mac, follow [Run Dekopon on a Mac](https://github.com/dekopon-agents/dekopon/blob/main/docs/run-on-mac.md) for service accounts, configuration and launchd.
 
 ## Platforms
 
@@ -35,7 +23,7 @@ macOS on ARM64, and Linux on ARM64 and x86-64.
 
 `Formula/dekopon.rb` is rendered from the archives a release actually attached, so a new target appears here as soon as a release ships it. The platform list is not maintained by hand in two repositories.
 
-Intel Macs are the one deliberate exception. `0.3.0` did ship an `x86_64-apple-darwin` archive, but [dekopon-agents/dekopon#74](https://github.com/dekopon-agents/dekopon/pull/74) dropped that target from the release matrix, so `0.4.0` onward has none. Offering `0.3.0`'s copy would install cleanly on an Intel Mac and then dead-end, because the next `brew upgrade` would find nothing for that platform — worse than being plainly unsupported. The generator recognizes the target and skips it. Download the [v0.3.0 archive](https://github.com/dekopon-agents/dekopon/releases/tag/v0.3.0) directly or build from a checkout instead.
+Intel Macs are not supported: releases publish no `x86_64-apple-darwin` archive, and the generator skips that retired target, so the formula offers no Intel macOS download.
 
 ## How the formula is updated
 
@@ -71,7 +59,7 @@ Dekopon's archives are provenance-attested. Independently of Homebrew:
 
 ```console
 gh attestation verify --repo dekopon-agents/dekopon \
-  dekopon-0.3.0-aarch64-apple-darwin.tar.gz
+  dekopon-<version>-aarch64-apple-darwin.tar.gz
 ```
 
 ## License
